@@ -21,7 +21,7 @@ app.jinja_env.undefined = StrictUndefined  # Raises error for undefined vars
 @app.route("/")
 def show_index():
     """Show homepage."""
-    user_id = session['user']
+    user_id = session.get('user')
     if user_id:
         user = User.query.get(user_id)
 
@@ -112,7 +112,7 @@ def log_out_user():
 def task_list():
     """Show list of tasks."""  # All task objects for this user
 
-    user_id = session['user']  # get the user_id from the session dictionary
+    user_id = session.get('user')  # get the user_id from the session dictionary
     tasks = Task.query.filter_by(user_id=user_id).all()  # get list of tasks
 
     return render_template("dashboard.html", tasks=tasks)
@@ -122,7 +122,7 @@ def task_list():
 def add_new_task():
     """Add a new task to user's task list."""
 
-    user_id = session['user']  # get the user_id from the session dictionary
+    user_id = session.get('user')  # get the user_id from the session dictionary
     task_name = request.form.get("task_name")  # get from the form
     duration_estimate = request.form.get("duration_estimate")  # get from form
     new_task = Task(user_id=user_id, task_name=task_name,
@@ -150,7 +150,7 @@ def delete_task_from_task_list():
 def show_user_settings():
     """Show user's settings."""
 
-    if session['user']:
+    if session.get('user'):
         user_id = session['user']  # get the user_id from the session
         user = User.query.get(user_id)  # use the user_id to get the user
         username = user.username  # get the username from the user object
@@ -211,7 +211,7 @@ def add_task_to_gameplan():
     """Edit user's gameplan."""
     # add a task to gameplan using a task template
 
-    user_id = session['user']  # get the user_id from the session
+    user_id = session.get('user')  # get the user_id from the session
     task_id = request.form.get("gameplan_task_name")  # get from the drop down
     start_time = request.form.get("start_time")
     end_time = request.form.get("end_time")
